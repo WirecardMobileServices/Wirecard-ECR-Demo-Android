@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/titleTextView"
+        style="?attr/textAppearanceHeadline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Sale" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/transactionAmountLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Transaction amount">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/transactionAmountInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/paymentTypeInput"
+        style="@style/Widget.AppCompat.Spinner.Underlined"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tenureLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tenure">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tenureInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/invoiceNumberLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Invoice Number">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/invoiceNumberInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/orderIdLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Order id">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/orderIdInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/rnnLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="RNN">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/rnnInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/sendSale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Send" />
+
+</LinearLayout>

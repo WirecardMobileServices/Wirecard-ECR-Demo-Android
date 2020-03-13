@@ -1,0 +1,2 @@
+rootProject.name='Wirecard-ECR-Demo-Android'
+include ':demo'

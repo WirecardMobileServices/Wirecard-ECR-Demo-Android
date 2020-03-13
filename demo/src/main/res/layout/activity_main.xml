@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    tools:ignore="HardcodedText">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity"
+        tools:ignore="HardcodedText">
+
+        <EditText
+            android:id="@+id/ipAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:hint="192.168.x.x"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/port"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="192.168.0.1" />
+
+        <EditText
+            android:id="@+id/port"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:gravity="center"
+            android:hint="port"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:maxLength="4"
+            android:minWidth="100dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="7890"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_default="wrap" />
+
+        <ScrollView
+            android:id="@+id/consoleScrollView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="50dp"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ipAddress"
+            app:layout_constraintVertical_bias="0.0">
+
+            <TextView
+                android:id="@+id/console"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:longClickable="true"
+                android:paddingStart="20dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="8dp"
+                android:text="console"
+                android:textIsSelectable="true" />
+
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FAFAFA"
+        android:divider="@drawable/divider"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:showDividers="middle"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="50dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        tools:behavior_peekHeight="600dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EEE" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:src="@drawable/handle"
+            android:tint="@color/primary_light"
+            android:contentDescription="Bottom Sheet handle" />
+
+        <Button
+            android:id="@+id/echoButton"
+            style="@style/BottomButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="echo" />
+
+        <Button
+            android:id="@+id/saleButton"
+            style="@style/BottomButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="sale" />
+
+        <Button
+            android:id="@+id/refundButton"
+            style="@style/BottomButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="refund" />
+
+        <Button
+            android:id="@+id/preAuthButton"
+            style="@style/BottomButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pre-auth" />
+
+        <Button
+            android:id="@+id/voidButton"
+            style="@style/BottomButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="void" />
+
+        <Button
+            android:id="@+id/settlementButton"
+            style="@style/BottomButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="settlement" />
+
+        <Button
+            android:id="@+id/getLastTransactionButton"
+            style="@style/BottomButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="get last transaction" />
+
+        <Button
+            android:id="@+id/getLastSettlementButton"
+            style="@style/BottomButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="get last settlement" />
+
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
