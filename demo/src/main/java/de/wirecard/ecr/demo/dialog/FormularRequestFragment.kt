@@ -16,6 +16,9 @@ class FormularRequestFragment : BaseDialogFragment() {
 
     private lateinit var request: FormularRequestType
 
+    val isRequestEmptyForm
+        get() = request in arrayOf(FormularRequestType.PAIRING, FormularRequestType.ECHO, FormularRequestType.SETTLEMENT, FormularRequestType.GET_LAST_TRANSACTION, FormularRequestType.GET_LAST_SETTLEMENT)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -33,18 +36,23 @@ class FormularRequestFragment : BaseDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         titleTextView.text = when (request) {
+            FormularRequestType.PAIRING -> "Pairing"
+            FormularRequestType.ECHO -> "Echo"
             FormularRequestType.SALE -> "Sale"
             FormularRequestType.INSTALLMENT -> "Installment"
             FormularRequestType.REFUND -> "Refund"
             FormularRequestType.PRE_AUTH -> "Pre-Auth"
+            FormularRequestType.SETTLEMENT -> "Settlement"
+            FormularRequestType.GET_LAST_TRANSACTION -> "Get Last Transaction"
+            FormularRequestType.GET_LAST_SETTLEMENT -> "Get Last Settlement"
             FormularRequestType.SALE_COMPLETION -> "Sale Completion"
             FormularRequestType.VOID -> "Void"
             FormularRequestType.TOKENIZATION -> "Tokenization"
         }
 
-        transactionAmountLayout.changeVisibility(request != FormularRequestType.TOKENIZATION)
-        paymentTypeInput.changeVisibility(request != FormularRequestType.TOKENIZATION)
-        if (request != FormularRequestType.TOKENIZATION) {
+        transactionAmountLayout.changeVisibility(request != FormularRequestType.TOKENIZATION && !isRequestEmptyForm)
+        paymentTypeInput.changeVisibility(request != FormularRequestType.TOKENIZATION && !isRequestEmptyForm)
+        if (request != FormularRequestType.TOKENIZATION && !isRequestEmptyForm) {
             paymentTypeInput.setAdapter(
                     ArrayAdapter(
                             requireContext(),
@@ -53,18 +61,30 @@ class FormularRequestFragment : BaseDialogFragment() {
             )
             paymentTypeInput.setSelection(0)
         }
-        tenureLayout.changeVisibility(request == FormularRequestType.INSTALLMENT)
-        invoiceNumberLayout.changeVisibility(request == FormularRequestType.VOID)
-        rnnLayout.changeVisibility(request == FormularRequestType.SALE_COMPLETION)
+        tenureLayout.changeVisibility(request == FormularRequestType.INSTALLMENT && !isRequestEmptyForm)
+        invoiceNumberLayout.changeVisibility(request == FormularRequestType.VOID && !isRequestEmptyForm)
+        rnnLayout.changeVisibility(request == FormularRequestType.SALE_COMPLETION && !isRequestEmptyForm)
+        orderIdLayout.changeVisibility(!isRequestEmptyForm)
 
         sendSale.setOnClickListener {
             listener?.onFragmentSendClicked(
                     when (request) {
+                        FormularRequestType.PAIRING -> PairingRequest(
+                                PairingRequestData(
+                                        deviceIdInput.text.toString()
+                                )
+                        )
+                        FormularRequestType.ECHO -> EchoRequest(
+                                EchoRequestData(
+                                        deviceIdInput.text.toString()
+                                )
+                        )
                         FormularRequestType.SALE -> SaleRequest(
                                 SaleRequest.SaleRequestData(
                                         transactionAmountInput.text.toString(),
                                         PaymentType.values()[paymentTypeInput.selectedItemPosition],
-                                        orderIdInput.text.toString()
+                                        orderIdInput.text.toString(),
+                                        deviceIdInput.text.toString()
                                 )
                         )
                         FormularRequestType.INSTALLMENT -> InstallmentRequest(
@@ -72,21 +92,39 @@ class FormularRequestFragment : BaseDialogFragment() {
                                         transactionAmountInput.text.toString(),
                                         PaymentType.values()[paymentTypeInput.selectedItemPosition],
                                         tenureInput.text.toString(),
-                                        orderIdInput.text.toString()
+                                        orderIdInput.text.toString(),
+                                        deviceIdInput.text.toString()
                                 )
                         )
                         FormularRequestType.REFUND -> RefundRequest(
                                 RefundRequest.RefundRequestData(
                                         transactionAmountInput.text.toString(),
                                         PaymentType.values()[paymentTypeInput.selectedItemPosition],
-                                        orderIdInput.text.toString()
+                                        orderIdInput.text.toString(),
+                                        deviceIdInput.text.toString()
                                 )
                         )
                         FormularRequestType.PRE_AUTH -> PreAuthRequest(
                                 PreAuthRequest.PreAuthRequestData(
                                         transactionAmountInput.text.toString(),
                                         PaymentType.values()[paymentTypeInput.selectedItemPosition],
-                                        orderIdInput.text.toString()
+                                        orderIdInput.text.toString(),
+                                        deviceIdInput.text.toString()
+                                )
+                        )
+                        FormularRequestType.SETTLEMENT -> SettlementRequest(
+                                data = SettlementRequestData(
+                                        deviceIdInput.text.toString()
+                                )
+                        )
+                        FormularRequestType.GET_LAST_TRANSACTION -> GetLastTransactionRequest(
+                                GetLastTransactionRequestData(
+                                        deviceIdInput.text.toString()
+                                )
+                        )
+                        FormularRequestType.GET_LAST_SETTLEMENT -> GetLastSettlementRequest(
+                                data = GetLastSettlementRequestData(
+                                        deviceIdInput.text.toString()
                                 )
                         )
                         FormularRequestType.SALE_COMPLETION -> CompletionRequest(
@@ -94,7 +132,8 @@ class FormularRequestFragment : BaseDialogFragment() {
                                         transactionAmountInput.text.toString(),
                                         PaymentType.values()[paymentTypeInput.selectedItemPosition],
                                         rnnInput.text.toString(),
-                                        orderIdInput.text.toString()
+                                        orderIdInput.text.toString(),
+                                        deviceIdInput.text.toString()
                                 )
                         )
                         FormularRequestType.VOID -> VoidRequest(
@@ -102,12 +141,14 @@ class FormularRequestFragment : BaseDialogFragment() {
                                         transactionAmountInput.text.toString(),
                                         PaymentType.values()[paymentTypeInput.selectedItemPosition],
                                         invoiceNumberInput.text.toString(),
-                                        orderIdInput.text.toString()
+                                        orderIdInput.text.toString(),
+                                        deviceIdInput.text.toString()
                                 )
                         )
                         FormularRequestType.TOKENIZATION -> TokenizationRequest(
                                 TokenizationRequest.TokenizationRequestData(
-                                        orderIdInput.text.toString()
+                                        orderIdInput.text.toString(),
+                                        deviceIdInput.text.toString()
                                 )
                         )
                     }
@@ -135,10 +176,17 @@ class FormularRequestFragment : BaseDialogFragment() {
 }
 
 enum class FormularRequestType {
+    PAIRING,
+    ECHO,
+
     SALE,
     REFUND,
     PRE_AUTH,
     VOID,
+
+    SETTLEMENT,
+    GET_LAST_TRANSACTION,
+    GET_LAST_SETTLEMENT,
 
     INSTALLMENT,
     SALE_COMPLETION,

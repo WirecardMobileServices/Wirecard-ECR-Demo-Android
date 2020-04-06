@@ -14,7 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.wirecard.ecr.EcrSdk
 import de.wirecard.ecr.EcrSdkFactory
-import de.wirecard.ecr.demo.dialog.*
+import de.wirecard.ecr.demo.dialog.FormularRequestFragment
+import de.wirecard.ecr.demo.dialog.FormularRequestType
+import de.wirecard.ecr.demo.dialog.LoadingFragment
 import de.wirecard.ecr.demo.dialog.abs.OnDialogClick
 import de.wirecard.ecr.model.*
 import io.reactivex.Single
@@ -48,40 +50,36 @@ class MainActivity : AppCompatActivity(), OnDialogClick {
         ipAddress.setText(preferences.getString(PREF_IP, "10.247.1.3"))
         port.setText(preferences.getInt(PREF_PORT, 7890).toString())
 
+        pairingButton.setOnClickListener {
+            showFormularRequestFragment(FormularRequestType.PAIRING)
+        }
         echoButton.setOnClickListener {
-            showSimpleRequestFragment(SimpleRequestType.ECHO)
+            showFormularRequestFragment(FormularRequestType.ECHO)
         }
         saleButton.setOnClickListener {
-            showSaleRequestFragment(FormularRequestType.SALE)
+            showFormularRequestFragment(FormularRequestType.SALE)
         }
         refundButton.setOnClickListener {
-            showSaleRequestFragment(FormularRequestType.REFUND)
+            showFormularRequestFragment(FormularRequestType.REFUND)
         }
         preAuthButton.setOnClickListener {
-            showSaleRequestFragment(FormularRequestType.PRE_AUTH)
+            showFormularRequestFragment(FormularRequestType.PRE_AUTH)
         }
         voidButton.setOnClickListener {
-            showSaleRequestFragment(FormularRequestType.VOID)
+            showFormularRequestFragment(FormularRequestType.VOID)
         }
         settlementButton.setOnClickListener {
-            showSimpleRequestFragment(SimpleRequestType.SETTLEMENT)
+            showFormularRequestFragment(FormularRequestType.SETTLEMENT)
         }
         getLastTransactionButton.setOnClickListener {
-            showSimpleRequestFragment(SimpleRequestType.GET_LAST_TRANSACTION)
+            showFormularRequestFragment(FormularRequestType.GET_LAST_TRANSACTION)
         }
         getLastSettlementButton.setOnClickListener {
-            showSimpleRequestFragment(SimpleRequestType.GET_LAST_SETTLEMENT)
+            showFormularRequestFragment(FormularRequestType.GET_LAST_SETTLEMENT)
         }
     }
 
-    private fun showSimpleRequestFragment(request: SimpleRequestType) {
-        hideBottomSheet()
-        consoleScrollView.postDelayed({
-            SimpleRequestFragment.newInstance(request).show(supportFragmentManager, request.toString())
-        }, 200)
-    }
-
-    private fun showSaleRequestFragment(request: FormularRequestType) {
+    private fun showFormularRequestFragment(request: FormularRequestType) {
         hideBottomSheet()
         consoleScrollView.postDelayed({
             FormularRequestFragment.newInstance(request).show(supportFragmentManager, request.toString())
@@ -174,45 +172,32 @@ class MainActivity : AppCompatActivity(), OnDialogClick {
         addToConsole("\nsend: $request")
         loading.show(supportFragmentManager, "loading")
         when (request) {
+            is PairingRequest -> {
+                ecr.pairing(request.data).subscribeIoObserveMain().subscribe { response, throwable -> logResponse(response ?: throwable) }
+            }
             is EchoRequest -> {
-                ecr.echo().subscribeIoObserveMain().subscribe { response, throwable ->
-                    logResponse(response ?: throwable)
-                }
+                ecr.echo(request.data).subscribeIoObserveMain().subscribe { response, throwable -> logResponse(response ?: throwable) }
             }
             is SaleRequest -> {
-                ecr.sale(request.data).subscribeIoObserveMain().subscribe { response, throwable ->
-                    logResponse(response ?: throwable)
-                }
+                ecr.sale(request.data).subscribeIoObserveMain().subscribe { response, throwable -> logResponse(response ?: throwable) }
             }
             is RefundRequest -> {
-                ecr.refund(request.data).subscribeIoObserveMain().subscribe { response, throwable ->
-                    logResponse(response ?: throwable)
-                }
+                ecr.refund(request.data).subscribeIoObserveMain().subscribe { response, throwable -> logResponse(response ?: throwable) }
             }
             is PreAuthRequest -> {
-                ecr.preAuth(request.data).subscribeIoObserveMain().subscribe { response, throwable ->
-                    logResponse(response ?: throwable)
-                }
+                ecr.preAuth(request.data).subscribeIoObserveMain().subscribe { response, throwable -> logResponse(response ?: throwable) }
             }
             is VoidRequest -> {
-                ecr.void(request.data).subscribeIoObserveMain().subscribe { response, throwable ->
-                    logResponse(response ?: throwable)
-                }
+                ecr.void(request.data).subscribeIoObserveMain().subscribe { response, throwable -> logResponse(response ?: throwable) }
             }
             is SettlementRequest -> {
-                ecr.settlement().subscribeIoObserveMain().subscribe { response, throwable ->
-                    logResponse(response ?: throwable)
-                }
+                ecr.settlement(request.data).subscribeIoObserveMain().subscribe { response, throwable -> logResponse(response ?: throwable) }
             }
             is GetLastTransactionRequest -> {
-                ecr.getLastTransaction().subscribeIoObserveMain().subscribe { response, throwable ->
-                    logResponse(response ?: throwable)
-                }
+                ecr.getLastTransaction(request.data).subscribeIoObserveMain().subscribe { response, throwable -> logResponse(response ?: throwable) }
             }
             is GetLastSettlementRequest -> {
-                ecr.getLastSettlement().subscribeIoObserveMain().subscribe { response, throwable ->
-                    logResponse(response ?: throwable)
-                }
+                ecr.getLastSettlement(request.data).subscribeIoObserveMain().subscribe { response, throwable -> logResponse(response ?: throwable) }
             }
             else -> {
                 addToConsole("UNKNOWN operation")
